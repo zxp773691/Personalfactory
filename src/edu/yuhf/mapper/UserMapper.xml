@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC 
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.yuhf.dao.UserDao">  
+    <select id="queryById" parameterType="int" resultType="edu.yuhf.entity.User">
+    	select id,userno,username,password,realname,telephone,idcard,to_char(registertime,'yyyy-mm-dd') registertime,state from users where id=#{id}
+    </select>
+    <select id="queryAll"  resultType="edu.yuhf.entity.User">
+    	select id,userno,username,password,realname,telephone,idcard,to_char(registertime,'yyyy-mm-dd') registertime,state from users 
+    </select>
+    <select id="queryByName" parameterType="String" resultType="edu.yuhf.entity.User" >
+    	select id,userno,username,password,realname,telephone,idcard,to_char(registertime,'yyyy-mm-dd') registertime,state from users where username like '%${value}%'
+    </select >
+    <update id="update" parameterType="edu.yuhf.entity.User">
+    	update users set username=#{username},password=#{password},realname=#{realname},userno=#{userno},telephone=#{telephone},idcard=#{idcard},registertime=to_date(#{registertime},'yyyy-mm-dd'),state=#{state} where id=#{id}
+    </update>
+        <delete id="delete" >
+    	delete users where id in
+    	<foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    <insert id="insert" parameterType="edu.yuhf.entity.User" >
+    <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select usersID.nextval as id from dual
+    </selectKey>
+    	insert into users values(#{id},#{userno},#{username},#{password},#{realname},#{telephone},#{idcard},to_date(#{registertime},'yyyy-mm-dd'),#{state})
+    </insert>
+</mapper>

@@ -1,0 +1,51 @@
+h1{
+	font-size: 20px;
+	font-family: "微软雅黑";
+	text-align: center;
+}
+h6{
+	font:12px/20px 宋体;
+	color:red;
+	margin:5px;auto;
+	text-align:center;
+}
+section{
+	vertical-align: baseline;
+	border:1px solid #ccc;
+	border-radius: 6px;
+	width: 400px;
+	margin: 200px auto 0px auto;
+	background: url(../img/tmbg-white.png);
+}
+fieldset{
+	border:0px;
+}
+input[type=text],input[type=password]{
+	width:300px;
+	height: 30px;
+	margin-top:5px;
+	margin-left: 30px;
+	padding-left:4px;
+	font-family:"simsun";
+	
+}
+input[type=checkbox]{
+	margin:5px auto;
+}
+nav{
+	margin-left: 80px;
+}
+html{
+	height:100%;
+    background: -webkit-gradient(linear,left top,left bottom, from(rgba(0, 101, 181,0.8)), to(#fff));
+}
+label{
+	font-size:16px;
+	font-family:"黑体";
+	
+}
+#div_nothing{
+	height:20px
+}
+
+::-webkit-input-placeholder { color:#B0B0B0; }

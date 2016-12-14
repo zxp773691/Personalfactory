@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC 
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.yuhf.dao.MaterialDao">  
+    <select id="queryall"  resultType="edu.yuhf.entity.Material">
+    	select * from material 
+    </select>
+    <select id="queryById"  parameterType="int" resultType="edu.yuhf.entity.Material">
+    	select * from material where id=#{id}
+    </select>
+    <select id="queryByName" parameterType="String" resultType="edu.yuhf.entity.Material" >
+    	select * from material where name like '%${value}%'
+    </select >
+    <update id="update" parameterType="edu.yuhf.entity.Material">
+    	update material set name=#{name},rate=#{rate},type=#{type},state=#{state},price=#{price} where id=#{id}
+    </update>
+    <delete id="delete" >
+    	delete material where id in
+    	<foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    <insert id="insert" parameterType="edu.yuhf.entity.Material" >
+    <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select materialID.nextval as id from dual
+    </selectKey>
+    	insert into material values(#{id},#{name},#{rate},#{type},#{state},#{price})
+    </insert>
+    <select id="queryBySingleName" parameterType="String" resultType="edu.yuhf.entity.Material" >
+    	select * from material where name=#{value}
+    </select >
+    <select id="queryMaterial" resultType="edu.yuhf.entity.Material"  >
+    	select * from material where type=0
+    </select>
+</mapper>

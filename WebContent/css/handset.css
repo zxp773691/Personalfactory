@@ -1,0 +1,10 @@
+.top{
+	border:1px solid #ccc;
+	text-align:center;
+	height:100px;
+	width:100%;
+}
+.button_NewHandset{
+	float:right;
+	margin:20px;
+}

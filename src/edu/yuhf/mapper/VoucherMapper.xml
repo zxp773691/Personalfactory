@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC 
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.yuhf.dao.VoucherDao"> 
+    <select id="queryAll"  resultType="edu.yuhf.entity.Voucher">
+    	select * from voucher 
+    </select>
+    <select id="queryById"  parameterType="int" resultType="edu.yuhf.entity.Voucher">
+    	select id,voucherno,type,to_char(occurtime,'yyyy/mm/dd') occurtime,weight,totalprice,materialid,customerid,bususerid,storeuserid from voucher where id=#{id}
+    </select>
+    <select id="countByOccurtime" parameterType="String" resultType="int">
+    	select count(*) from voucher where occurtime=to_date(#{date},'yyyy-mm-dd') 
+    </select>
+    <insert id="buyMaterial" parameterType="edu.yuhf.entity.Voucher" >
+    <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select voucherID.nextval as id from dual
+    </selectKey>
+    insert into voucher(id,voucherno,type,occurtime,weight,totalprice,materialid,customerid,bususerid) 
+    values(#{id},#{voucherno},#{type},to_date(#{occurtime},'yyyy/mm/dd'),#{weight},#{totalprice},#{materialid},#{customerid},#{bususerid})
+    </insert>
+    <select id="queryByCustomerId" parameterType="int" resultType="edu.yuhf.entity.Voucher" >
+    	select * from voucher where customerid=#{id}
+    </select >
+    <update id="update" parameterType="edu.yuhf.entity.Voucher">
+    	update voucher set voucherno=#{voucherno},type=#{type},occurtime=to_date(#{occurtime},'yyyy/mm/dd'),weight=#{weight},totalprice=#{totalprice},materialid=#{materialid},customerid=#{customerid},bususerid=#{bususerid},storeuserid=#{storeuserid} where id=#{id}
+    </update>
+    <delete id="delete" >
+    	delete voucher where id in
+    	<foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    <insert id="insert" parameterType="edu.yuhf.entity.Voucher" >
+    <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select voucherID.nextval as id from dual
+    </selectKey>
+    	insert into voucher values(#{id},#{voucherno},#{type},to_date(#{occurtime},'yyyy/mm/dd'),#{weight},#{totalprice},#{materialid},#{customerid},#{bususerid},#{storeuserid})
+    </insert>
+    <select id="queryStoreUserNull" resultType="edu.yuhf.entity.Voucher">
+    	select * from voucher where storeuserid is null
+    </select>
+        <select id="queryByCrIdAndBrNull" parameterType="int" resultType="edu.yuhf.entity.Voucher" >
+    	select * from voucher where customerid=#{id} and bususerid is null
+    </select >
+</mapper>

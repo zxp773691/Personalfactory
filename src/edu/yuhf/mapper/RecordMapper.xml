@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC 
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.yuhf.dao.RecordDao">  
+    <select id="queryAll"  resultType="edu.yuhf.entity.Record">
+    	select * from record 
+    </select>
+    <select id="queryById"  parameterType="int" resultType="edu.yuhf.entity.Record">
+    	select * from record where id=#{id}
+    </select>
+    <update id="update" parameterType="edu.yuhf.entity.Record">
+    	update record set processtime=to_date(#{processtime},'yyyy/mm/dd'),mlweight=#{mlweight},frweight=#{frweight},mlid=#{mlid},frid=#{frid} where id=#{id}
+    </update>
+    <delete id="delete" >
+    	delete record where id in
+    	<foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    <insert id="insert" parameterType="edu.yuhf.entity.Record" >
+    <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select recordID.nextval as id from dual
+    </selectKey>
+    	insert into record values(#{id},to_date(#{processtime},'yyyy/mm/dd'),#{mlweight},#{frweight},#{mlid},#{frid})
+    </insert>
+    <select id="queryRecordInfo" resultType="edu.yuhf.entity.RecordInfo">
+    	select record.id id,record.processtime processtime,ml1.name mlname,ml2.name frname,record.mlweight mlweight,record.frweight frweight from record join material ml1 on record.mlid=ml1.id join material ml2 on record.frid=ml2.id 
+    </select>
+    <select id="queryByFrName" parameterType="String" resultType="edu.yuhf.entity.RecordInfo">
+        select record.id id,record.processtime processtime,ml1.name mlname,ml2.name frname,record.mlweight mlweight,record.frweight frweight from record join material ml1 on record.mlid=ml1.id join material ml2 on record.frid=ml2.id where ml2.name like '%${value}%'
+    </select>
+    <select id="queryInfoById" parameterType="int" resultType="edu.yuhf.entity.RecordInfo" >
+    	select record.id id,record.processtime processtime,ml1.name mlname,ml2.name frname,record.mlweight mlweight,record.frweight frweight from record join material ml1 on record.mlid=ml1.id join material ml2 on record.frid=ml2.id where record.id=#{id}
+    </select>
+</mapper>

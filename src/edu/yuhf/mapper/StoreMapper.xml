@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC 
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.yuhf.dao.StoreDao">  
+    <select id="queryall"  resultType="edu.yuhf.entity.Store">
+    	select * from store 
+    </select>
+    <select id="queryById"  parameterType="int" resultType="edu.yuhf.entity.Store">
+    	select * from store where id=#{id}
+    </select>
+    <select id="queryByName" parameterType="String" resultType="edu.yuhf.entity.StoreInfo">
+    	select store.id,material.name,store.weight,material.type from store join material on store.materialid=material.id where material.name like '%${value}%'
+    </select>
+   	<select id="queryInfo"   resultType="edu.yuhf.entity.StoreInfo">
+    	select store.id,material.name,store.weight,material.type from store join material on store.materialid=material.id
+    </select>
+    <select id="queryInfoById" parameterType="int"  resultType="edu.yuhf.entity.StoreInfo">
+    	select store.id,material.name,store.weight,material.type from store join material on store.materialid=material.id where store.id=#{id}
+    </select>
+    <update id="update" parameterType="edu.yuhf.entity.Store" >
+    	update  store set weight=#{weight} where id=#{id}
+    </update>
+    <insert id="insert" parameterType="edu.yuhf.entity.Store" >
+    <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select storeID.nextval as id from dual
+    </selectKey>
+    	insert into store values(#{id},#{weight},#{materialid})
+    </insert>
+    <delete id="delete" >
+    	delete store where id in
+    	<foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    <select id="queryBySingleName" parameterType="String" resultType="edu.yuhf.entity.Store">
+    	select store.* from store join material on store.materialid=material.id where material.name=#{value}
+    </select>
+    <select id="queryByMaterialId"  parameterType="int" resultType="edu.yuhf.entity.Store">
+    	select * from store where materialid=#{id}
+    </select>
+</mapper>

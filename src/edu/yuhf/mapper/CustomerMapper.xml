@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC 
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.yuhf.dao.CustomerDao">  
+    <select id="queryAll"  resultType="edu.yuhf.entity.Customer">
+    	select id,customerno,name,address,telephone,idcard,to_char(registertime,'yyyy-mm-dd') registertime,state,remark from customer 
+    </select>
+    <select id="queryById"  parameterType="int" resultType="edu.yuhf.entity.Customer">
+    	select id,customerno,name,address,telephone,idcard,to_char(registertime,'yyyy-mm-dd') registertime,state,remark from customer where id=#{id}
+    </select>
+     <select id="queryByName" parameterType="String" resultType="edu.yuhf.entity.Customer" >
+    	select id,customerno,name,address,telephone,idcard,to_char(registertime,'yyyy-mm-dd') registertime,state,remark from customer where name like '%${value}%'
+    </select >
+    <update id="update" parameterType="edu.yuhf.entity.Customer">
+    	update customer set name=#{name},customerno=#{customerno},address=#{address},telephone=#{telephone},idcard=#{idcard},registertime=to_date(#{registertime},'yyyy-mm-dd'),state=#{state},remark=#{remark} where id=#{id}
+    </update>
+    <delete id="delete" >
+    	delete customer where id in
+    	<foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    <insert id="insert" parameterType="edu.yuhf.entity.Customer" >
+    <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select customerID.nextval as id from dual
+    </selectKey>
+    	insert into customer values(#{id},#{customerno},#{name},#{address},#{telephone},#{idcard},to_date(#{registertime},'yyyy-mm-dd'),#{state},#{remark})
+    </insert>
+    <select id="queryBySingleName" parameterType="String" resultType="edu.yuhf.entity.Customer" >
+    	select id,customerno,name,address,telephone,idcard,to_char(registertime,'yyyy-mm-dd') registertime,state,remark from customer where name=#{value}
+    </select >
+</mapper>

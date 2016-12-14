@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC 
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.yuhf.dao.PermissionDao"> 
+    <select id="queryAll"  resultType="edu.yuhf.entity.Permission">
+    	select * from permission 
+    </select>
+    <select id="queryById"  parameterType="int" resultType="edu.yuhf.entity.Permission">
+    	select * from permission where id=#{id}
+    </select>
+    <select id="getPermission" parameterType="int" resultType="edu.yuhf.entity.Permission">
+    	select p.id,p.name,p.url,p.remark,p.type from users u inner join userrole ur on u.id=ur.userId inner join rolepermission rp on ur.roleId=rp.roleId inner join permission p on rp.permissionId=p.id where u.id=#{id}
+    </select>
+    <select id="queryByName" parameterType="String" resultType="edu.yuhf.entity.Permission" >
+    	select * from permission where name like '%${value}%'
+    </select >
+        <update id="update" parameterType="edu.yuhf.entity.Permission">
+    	update permission set name=#{name},url=#{url},remark=#{remark},type=#{type} where id=#{id}
+    </update>
+    <delete id="delete" >
+    	delete permission where id in
+    	<foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    <insert id="insert" parameterType="edu.yuhf.entity.Permission" >
+    <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select permissionID.nextval as id from dual
+    </selectKey>
+    	insert into permission values(#{id},#{name},#{url},#{remark},#{type})
+    </insert>
+     <select id="queryByRoleId"  parameterType="int" resultType="edu.yuhf.entity.Permission">
+    	select * from permission join rolepermission on permission.id=rolepermission.permissionid join role on role.id=rolepermission.roleid where role.id=#{id}
+    </select>
+     <delete id="deleteRolePermission" parameterType="int">
+    	delete from rolepermission where roleid=#{id}
+    </delete>
+     <insert id="insertRolePermission" parameterType="hashmap" >
+        <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select rolepermissionID.nextval as id from dual
+    </selectKey>
+    	insert into rolepermission values(#{id},#{roleid},#{permissionid})
+    </insert>
+</mapper>

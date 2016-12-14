@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC 
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.yuhf.dao.RoleDao">  
+    <select id="queryAll"  resultType="edu.yuhf.entity.Role">
+    	select * from role 
+    </select>
+    <select id="queryById"  parameterType="int" resultType="edu.yuhf.entity.Role">
+    	select * from role where id=#{id}
+    </select>
+    <select id="queryByName" parameterType="String" resultType="edu.yuhf.entity.Role" >
+    	select * from role where name like '%${value}%'
+    </select >
+    <update id="update" parameterType="edu.yuhf.entity.Role">
+    	update role set name=#{name},remark=#{remark} where id=#{id}
+    </update>
+        <delete id="delete" >
+    	delete role where id in
+    	<foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    <insert id="insert" parameterType="edu.yuhf.entity.Role" >
+    <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select roleID.nextval as id from dual
+    </selectKey>
+    	insert into role values(#{id},#{name},#{remark})
+    </insert>
+    <select id="queryByUserId"  parameterType="int" resultType="edu.yuhf.entity.Role">
+    	select * from role join userrole on role.id=userrole.roleid join users on users.id=userrole.userid where users.id=#{id}
+    </select>
+    <delete id="deleteUserRole" parameterType="int">
+    	delete from userrole where userid=#{id}
+    </delete>
+    <insert id="insertUserRole" parameterType="hashmap" >
+        <selectKey resultType="int" order="BEFORE" keyProperty="id">
+    	select userroleID.nextval as id from dual
+    </selectKey>
+    	insert into userrole values(#{id},#{userid},#{roleid})
+    </insert>
+</mapper>
